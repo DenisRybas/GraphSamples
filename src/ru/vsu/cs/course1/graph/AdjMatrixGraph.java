@@ -108,15 +108,11 @@ public class AdjMatrixGraph implements Graph {
         };
     }
 
-    //smth like dat
     private boolean isSafe(int v, int graph[][], List<Integer> path, int pos) {
         if (graph[path.get(pos - 1)][v] == 0)
             return false;
 
         return !path.contains(v);
-        //for (int i = 0; i < pos; i++)
-          //  if (path[i] == v)
-            //    return false;
     }
 
     interface PathsExplorer {
@@ -144,18 +140,10 @@ public class AdjMatrixGraph implements Graph {
 
         for (int v = 0; v < adjMatrix.length; v++) {
             if (isSafe(v, graph, path, pos)) {
-                //path[pos] = v;
                 path.add(v);
-
-                //System.arraycopy(path, 0, copyOfPath, 0, adjMatrix.length);
-                //List<Integer> copyOfPath = new LinkedList<>(path);
-                //paths.add(copyOfPath);
                 pe.newPathFound(new PathsExplorer.LazyList(path));
-
                 hamCycleUtil(graph, path, pos + 1, pe);
-
                 path.remove(pos);
-                // path[pos] = -1;
             }
         }
     }
@@ -170,8 +158,6 @@ public class AdjMatrixGraph implements Graph {
                 else matrix[i][j] = 0;
             }
         }
-        //Arrays.fill(path, -1);
-        //List<Integer> maxPath = new LinkedList<>();
 
         class MaxPathsExplorer implements PathsExplorer {
             private List<Integer> maxPath = new LinkedList<>();
@@ -193,60 +179,17 @@ public class AdjMatrixGraph implements Graph {
             hamCycleUtil(matrix, path, 1, pe);
         }
 
-        //Arrays.fill(maxPath, -1);
-        //int quantityOfElems = 0;
-        //int maxPathLength = 0;
-        /*for (int[] chain : paths) {
-            for (int value : chain) {
-                if (value == -1) {
-                    break;
-                }
-                quantityOfElems++;
-            }
-            for (int value : maxPath) {
-                if (value == -1) {
-                    break;
-                }
-                maxPathLength++;
-            }
-            if (quantityOfElems >= maxPathLength) {
-                maxPath = Arrays.copyOf(chain, chain.length);
-            }
-            maxPathLength = 0;
-            quantityOfElems = 0;
-        }
-
-         */
-
-        /*
-        for (int value : maxPath) {
-            System.out.print(value + " ");
-        }
-        System.out.println();*/
-
         for (int i = 0; i < adjMatrix.length; i++) {
             for (int j = 0; j < adjMatrix.length; j++) {
                 adjMatrix[i][j] = false;
             }
         }
 
-        int quantityOfElems = 0;
         Integer[] maxPath = pe.getMaxPath().toArray(new Integer[0]);
         for (int i = 0; i < maxPath.length - 1; i++) {
             adjMatrix[maxPath[i]][maxPath[i + 1]] = true;
             adjMatrix[maxPath[i + 1]][maxPath[i]] = true;
         }
-
-        /*List<Integer> mp = pe.getMaxPath();
-        Iterator<Integer> first = mp.iterator();
-        Iterator<Integer> second = mp.iterator();
-        if (second.hasNext()) second.next();
-        while (second.hasNext()) {
-            int f = first.next();
-            int s = second.next();
-            adjMatrix[f][s] = true;
-            adjMatrix[s][f] = true;
-        }*/
 
         return adjMatrix.length - maxPath.length;
     }
