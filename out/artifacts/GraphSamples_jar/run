@@ -1,0 +1,17 @@
+#!/bin/bash
+
+cd "`dirname "\`readlink -f "$0"\`"`"
+
+
+test -e ./_props.sh && . ./_props.sh
+
+
+CP=.
+CP=$CP:./GraphSamples.jar
+LIB_DIR=./lib
+for JAR in $(ls $LIB_DIR); do
+  CP=$CP:$LIB_DIR/$JAR
+done
+
+
+nohup java -cp $CP ru.vsu.cs.course1.graph.demo.Program "$@" >/dev/null 2>&1 &
